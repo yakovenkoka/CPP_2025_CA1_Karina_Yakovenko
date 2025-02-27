@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 #include <map>
+#include <limits.h>
+#include <list>
 
 using namespace std;
 
@@ -112,6 +114,59 @@ void displayPhonesByBrand(const vector<Phone>& phones, const string& brand) {
     }
 }
 
+//Function to find the highest, lowest and average of a discrete numerical field (Integer)
+int findMaxMinAvgReleaseYear(const vector<Phone>& phones, Phone& max, Phone& min) {
+    int sum = 0;
+    int maxReleaseYear = INT_MIN;
+    int minReleaseYear = INT_MAX;
+
+    for (const Phone& p : phones) {
+        sum += p.releaseYear;
+
+        if (p.releaseYear > maxReleaseYear) {
+            maxReleaseYear = p.releaseYear;
+            max = p;
+        }
+        if (p.releaseYear < minReleaseYear) {
+            minReleaseYear = p.releaseYear;
+            min = p;
+        }
+    }
+    return sum / phones.size();
+}
+
+//Function to search for phones that match or partially match a given text input
+list<Phone> searchPhoneByPartialText(const vector<Phone>& phones, const string& text) {
+    list<Phone> matchingPhones;
+    for(auto it = phones.begin(); it != phones.end(); it++) {
+        if (it->model.find(text) != string::npos) {
+            matchingPhones.push_back(*it);
+        }
+    }
+    return matchingPhones;
+}
+
+// Function to display all of the data in descending order of a selected floating point field
+void displayPhonesInDescendingOrder(const vector<Phone>& phones){
+    vector<Phone> sortedPhones = phones;
+    sort(sortedPhones.begin(), sortedPhones.end(), [](const Phone& p1, const Phone& p2) {
+        return p1.price > p2.price;
+    });
+
+    cout << "\n----Phones in descending order of price----" << endl;
+    cout << left
+    << setw(15) << "Brand"
+    << setw(35) << "Model"
+    << setw(15) << "Release Year"
+    << setw(15) << "Price"
+    << setw(10) << "Screen Size"
+    << endl;
+
+    for (const Phone& p : sortedPhones) {
+        displayPhone(p);
+    }
+}
+
 int main() {
     vector<Phone> phones;
     loadPhones("MOCK_DATA.csv", phones);
@@ -143,6 +198,27 @@ int main() {
     getline(cin, filterBrand);
     displayPhonesByBrand(phones, filterBrand);
 
+    // Find the highest, lowest and average of a discrete numerical field (Integer)
+    Phone max, min;
+    int avgReleaseYear = findMaxMinAvgReleaseYear(phones, max, min);
+    cout << "\nAverage release year: " << avgReleaseYear << endl;
+    cout << "Phone with highest release year: \t";
+    displayPhone(max);
+    cout << "Phone with lowest release year: \t";
+    displayPhone(min);
+
+    // Search for phones that match or partially match a given text input
+    string text;
+    cout << "\nEnter text to search in model: ";
+    getline(cin, text);
+    list<Phone> matchingPhones = searchPhoneByPartialText(phones, text);
+    cout << "\n----Phones with matching text in model----" << endl;
+    for (const Phone& p : matchingPhones) {
+        displayPhone(p);
+    }
+
+    //Display phones in descending order of price
+    displayPhonesInDescendingOrder(phones);
 
     return 0;
 }
