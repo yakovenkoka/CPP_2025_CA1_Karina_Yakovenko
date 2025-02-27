@@ -112,6 +112,27 @@ void displayPhonesByBrand(const vector<Phone>& phones, const string& brand) {
     }
 }
 
+//Function to find the highest, lowest and average of a discrete numerical field (Integer)
+int findMaxMinAvgReleaseYear(const vector<Phone>& phones, Phone& max, Phone& min) {
+    int sum = 0;
+    int maxReleaseYear = INT_MIN;
+    int minReleaseYear = INT_MAX;
+
+    for (const Phone& p : phones) {
+        sum += p.releaseYear;
+
+        if (p.releaseYear > maxReleaseYear) {
+            maxReleaseYear = p.releaseYear;
+            max = p;
+        }
+        if (p.releaseYear < minReleaseYear) {
+            minReleaseYear = p.releaseYear;
+            min = p;
+        }
+    }
+    return sum / phones.size();
+}
+
 int main() {
     vector<Phone> phones;
     loadPhones("MOCK_DATA.csv", phones);
@@ -143,6 +164,14 @@ int main() {
     getline(cin, filterBrand);
     displayPhonesByBrand(phones, filterBrand);
 
+    // Find the highest, lowest and average of a discrete numerical field (Integer)
+    Phone max, min;
+    int avgReleaseYear = findMaxMinAvgReleaseYear(phones, max, min);
+    cout << "\nAverage release year: " << avgReleaseYear << endl;
+    cout << "Phone with highest release year: \t";
+    displayPhone(max);
+    cout << "Phone with lowest release year: \t";
+    displayPhone(min);
 
     return 0;
 }
