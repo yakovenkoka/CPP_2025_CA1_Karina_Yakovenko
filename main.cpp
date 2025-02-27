@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 #include <map>
+#include <limits.h>
+#include <list>
 
 using namespace std;
 
@@ -133,6 +135,17 @@ int findMaxMinAvgReleaseYear(const vector<Phone>& phones, Phone& max, Phone& min
     return sum / phones.size();
 }
 
+//Function to search for phones that match or partially match a given text input
+list<Phone> searchPhoneByPartialText(const vector<Phone>& phones, const string& text) {
+    list<Phone> matchingPhones;
+    for(auto it = phones.begin(); it != phones.end(); it++) {
+        if (it->model.find(text) != string::npos) {
+            matchingPhones.push_back(*it);
+        }
+    }
+    return matchingPhones;
+}
+
 int main() {
     vector<Phone> phones;
     loadPhones("MOCK_DATA.csv", phones);
@@ -172,6 +185,16 @@ int main() {
     displayPhone(max);
     cout << "Phone with lowest release year: \t";
     displayPhone(min);
+
+    // Search for phones that match or partially match a given text input
+    string text;
+    cout << "\nEnter text to search in model: ";
+    getline(cin, text);
+    list<Phone> matchingPhones = searchPhoneByPartialText(phones, text);
+    cout << "\n----Phones with matching text in model----" << endl;
+    for (const Phone& p : matchingPhones) {
+        displayPhone(p);
+    }
 
     return 0;
 }
