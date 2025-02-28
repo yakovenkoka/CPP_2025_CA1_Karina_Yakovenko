@@ -20,7 +20,7 @@ struct Phone {
     float screenSize;
 };
 
-// Function to display a single phon's data in a formatted way
+// Function to display data of one phone in formatted form
 void displayPhone(const Phone& p) {
     cout << left
     << setw(15) << p.brand
