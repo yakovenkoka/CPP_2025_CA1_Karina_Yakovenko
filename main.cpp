@@ -94,17 +94,29 @@ map<string, int> countPhonesByBrand(const vector<Phone>& phones) {
 
 // Function to display phones of a particular brand
 void displayPhonesByBrand(const vector<Phone>& phones, const string& brand) {
-    bool found = false;
+    vector<Phone> filteredPhones;
     for (const Phone& p : phones) {
         if (p.brand == brand) {
-            displayPhone(p);
-            found = true;
+            filteredPhones.push_back(p);
         }
     }
-    if (!found) {
-        cout << "No phones found for brand: " << brand << endl;
-    } 
 
+    if (filteredPhones.empty()) {
+        cout << "No phones found for brand: " << brand << endl;
+    } else {
+        cout << "\n----Phones of brand " << brand << "----" << endl;
+        cout << left
+        << setw(15) << "Brand"
+        << setw(35) << "Model"
+        << setw(15) << "Release Year"
+        << setw(15) << "Price"
+        << setw(10) << "Screen Size"
+        << endl;
+
+        for (const Phone& p : filteredPhones) {
+            displayPhone(p);
+        }
+    }
 }
 
 //Function to find the highest, lowest and average of a discrete numerical field (Integer)
@@ -247,7 +259,21 @@ int main() {
                 cout << "\nEnter text to search in model: ";
                 getline(cin, text);
                 list<Phone> matchingPhones = searchPhoneByPartialText(phones, text);
-                
+
+                if(matchingPhones.empty()) {
+                    cout << "No phones found" << endl;
+                    break;
+                }
+
+                cout << "\n----Phones matching text----" << endl;
+                cout << left
+                << setw(15) << "Brand"
+                << setw(35) << "Model"
+                << setw(15) << "Release Year"
+                << setw(15) << "Price"
+                << setw(10) << "Screen Size"
+                << endl;
+
                 for (const Phone& p : matchingPhones) {
                     displayPhone(p);
                 }
