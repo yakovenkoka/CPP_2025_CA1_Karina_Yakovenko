@@ -296,7 +296,9 @@ int main() {
             }
             case 8:
                 exit = true;
+                cout << "Exit program" << endl;
                 break;
+
             default:
                 cout << "Invalid choice" << endl;
         }
