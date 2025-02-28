@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// Structure to store phone data
 struct Phone {
     string brand;
     string model;
@@ -19,6 +20,7 @@ struct Phone {
     float screenSize;
 };
 
+// Function to display a single phon's data in a formatted way
 void displayPhone(const Phone& p) {
     cout << left
     << setw(15) << p.brand
@@ -29,6 +31,7 @@ void displayPhone(const Phone& p) {
     << endl;
 }
 
+// Function to parse a line of csv data and store it in a Phone object
 void parsePhone(const string& line, Phone& p) {
     stringstream ss(line);
     string temp;
@@ -43,6 +46,7 @@ void parsePhone(const string& line, Phone& p) {
     p.screenSize = stof(temp);
 }
 
+// Function to load phone data from a csv file and store it in a vector of Phone objects
 void loadPhones(const string &filename, vector<Phone>& phones) {
     ifstream fin(filename);
     if(fin){
@@ -59,6 +63,7 @@ void loadPhones(const string &filename, vector<Phone>& phones) {
     }
 }
 
+// Function to display all phones from the vector with a formatted header
 void displayAllPhones(const vector<Phone>& phones) {
     cout << left
     << setw(15) << "Brand"
@@ -73,7 +78,8 @@ void displayAllPhones(const vector<Phone>& phones) {
     }
 }
 
-// Search index of phone by model
+// Function to search for a phone by model and return its index in the vector
+// Returns -1 if not found 
 int searchPhoneByModel(const vector<Phone>& phones, const string& model) {
     for (int i = 0; i < phones.size(); i++) {
         if (phones[i].model == model) {
@@ -84,6 +90,7 @@ int searchPhoneByModel(const vector<Phone>& phones, const string& model) {
 }
 
 // Function to count the number of phones of each brand
+// Returns a map with brand as key and the number of phones with that brand as value
 map<string, int> countPhonesByBrand(const vector<Phone>& phones) {
     map<string, int> count;
     for (const Phone& p : phones) {
@@ -119,7 +126,8 @@ void displayPhonesByBrand(const vector<Phone>& phones, const string& brand) {
     }
 }
 
-//Function to find the highest, lowest and average of a discrete numerical field (Integer)
+//Function to find the highest and lowest release year and to calculate the average release year
+//returns the average release year as an integer
 int findMaxMinAvgReleaseYear(const vector<Phone>& phones, Phone& max, Phone& min) {
     int sum = 0;
     int maxReleaseYear = INT_MIN;
@@ -140,10 +148,11 @@ int findMaxMinAvgReleaseYear(const vector<Phone>& phones, Phone& max, Phone& min
     return sum / phones.size();
 }
 
-//Function to search for phones that match or partially match a given text input
+//Function to search for phones where the model contains a partial text and return a list of matching phones 
 list<Phone> searchPhoneByPartialText(const vector<Phone>& phones, const string& text) {
     list<Phone> matchingPhones;
     for(auto it = phones.begin(); it != phones.end(); it++) {
+        //string::npos is returned if the text is not found in the model
         if (it->model.find(text) != string::npos) {
             matchingPhones.push_back(*it);
         }
@@ -151,7 +160,7 @@ list<Phone> searchPhoneByPartialText(const vector<Phone>& phones, const string& 
     return matchingPhones;
 }
 
-// Function to display all of the data in descending order of a selected floating point field
+//Function to display phones in descending order of price
 void displayPhonesInDescendingOrder(const vector<Phone>& phones){
     vector<Phone> sortedPhones = phones;
     sort(sortedPhones.begin(), sortedPhones.end(), [](const Phone& p1, const Phone& p2) {
@@ -199,6 +208,7 @@ int main() {
         getline(cin, input);
         
         try{
+            //stoi converts string to integer and throws an exception if the string is not a valid integer
             choice = stoi(input);
         } catch (exception e) {
             cout << "Invalid choice" << endl;
